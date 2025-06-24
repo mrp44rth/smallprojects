@@ -3,484 +3,441 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Crimson Elegance - A Refined Experience</title>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <title>Employee Verification - MKITM</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        /* Color Palette (Dark Reds & Accents) */
         :root {
-            --crimson: #8B0000;         /* Deep, rich red */
-            --maroon: #800000;          /* Classic maroon */
-            --burgundy: #880D1E;        /* Slightly more vibrant than maroon */
-            --dark-wine: #4C0000;       /* Very dark, almost black-red */
-            --gold-accent: #DAA520;     /* Soft gold for contrast */
-            --cream: #F5F5DC;           /* Off-white for background/text */
-            --light-gray: #E0E0E0;      /* For subtle borders */
-            --text-dark: #333333;       /* Dark text for readability */
+            --maroon: #800000;
+            --burgundy: #800020;
+            --crimson: #DC143C;
+            --dark-red-primary: var(--burgundy); /* Main dark red */
+            --dark-red-secondary: var(--crimson); /* Complementary dark red */
+            --success: #10b981;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --border: #e2e8f0;
+            --shadow: rgba(0, 0, 0, 0.08);
         }
 
-        /* Base Styles */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
         }
 
         body {
-            font-family: 'Lato', sans-serif;
+            background: linear-gradient(135deg, #fff0f0 0%, #ffe0e0 100%); /* Lighter red tint background */
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: var(--dark);
             line-height: 1.6;
-            color: var(--text-dark);
-            background-color: var(--cream);
+            overflow: hidden; /* Prevent scrollbar during loading */
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: white;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
             display: flex;
             flex-direction: column;
-            min-height: 100vh;
+            position: relative; /* For loader positioning */
         }
 
-        a {
-            color: var(--burgundy);
-            text-decoration: none;
-            transition: color 0.3s ease;
+        .header {
+            background: linear-gradient(to right, var(--dark-red-primary), var(--dark-red-secondary));
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
         }
 
-        a:hover {
-            color: var(--gold-accent);
+        .header h1 {
+            font-weight: 600;
+            font-size: 2.2rem;
+            margin-bottom: 5px;
+            letter-spacing: -0.5px;
         }
 
-        /* Header */
-        header {
-            background-color: var(--dark-wine);
-            color: var(--cream);
-            padding: 1.5rem 0;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .header-content {
-            max-width: 1200px;
+        .header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 500px;
             margin: 0 auto;
+        }
+
+        .logo-container {
+            background: white;
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 0 20px;
+            justify-content: center;
+            margin: -50px auto 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 10;
         }
 
         .logo {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.2rem;
-            font-weight: 700;
-            color: var(--gold-accent);
-            letter-spacing: 1px;
-        }
-
-        nav ul {
-            list-style: none;
-            display: flex;
-        }
-
-        nav ul li {
-            margin-left: 30px;
-        }
-
-        nav ul li a {
-            color: var(--cream);
-            font-weight: 400;
-            font-size: 1.1rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            padding: 5px 0;
-            position: relative;
-        }
-
-        nav ul li a::after {
-            content: '';
-            position: absolute;
-            width: 0;
-            height: 2px;
-            bottom: 0;
-            left: 0;
-            background-color: var(--gold-accent);
-            transition: width 0.3s ease;
-        }
-
-        nav ul li a:hover::after {
-            width: 100%;
-        }
-
-        /* Hero Section */
-        .hero-section {
-            background: linear-gradient(rgba(136, 13, 30, 0.7), rgba(128, 0, 0, 0.7)), url('https://source.unsplash.com/1600x900/?luxury,red,texture') no-repeat center center/cover;
-            color: var(--cream);
-            text-align: center;
-            padding: 100px 20px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: 60vh;
-        }
-
-        .hero-section h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 3.8rem;
-            margin-bottom: 20px;
-            font-weight: 700;
-            letter-spacing: 1.5px;
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
-        }
-
-        .hero-section p {
-            font-size: 1.3rem;
-            max-width: 700px;
-            margin-bottom: 40px;
-            line-height: 1.8;
-            opacity: 0.9;
-        }
-
-        .btn {
-            background-color: var(--gold-accent);
-            color: var(--dark-wine);
-            padding: 15px 35px;
-            border-radius: 5px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            transition: background-color 0.3s ease, transform 0.2s ease;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-        }
-
-        .btn:hover {
-            background-color: #FFD700; /* Brighter gold on hover */
-            transform: translateY(-3px);
-        }
-
-        /* Main Content Sections */
-        .container {
-            max-width: 1200px;
-            margin: 40px auto;
-            padding: 20px;
-            flex-grow: 1; /* Allows content to take up available space */
-        }
-
-        .section {
-            background-color: white;
-            padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-            margin-bottom: 40px;
-            border-top: 5px solid var(--burgundy);
-        }
-
-        .section h2 {
-            font-family: 'Playfair Display', serif;
             font-size: 2.5rem;
-            color: var(--maroon);
-            margin-bottom: 25px;
+            color: var(--dark-red-primary);
+            background: linear-gradient(to right, var(--dark-red-primary), var(--dark-red-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .content {
+            padding: 40px;
+            opacity: 0; /* Initially hidden */
+            transform: translateY(20px); /* For animation */
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+
+        .content.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .verification-section {
             text-align: center;
-            position: relative;
+            margin-bottom: 40px;
         }
 
-        .section h2::after {
-            content: '';
-            position: absolute;
-            width: 80px;
-            height: 3px;
-            background-color: var(--gold-accent);
-            left: 50%;
-            transform: translateX(-50%);
-            bottom: -10px;
-        }
-
-        .section p {
-            margin-bottom: 15px;
-            font-size: 1.1rem;
-            line-height: 1.7;
-            text-align: justify;
-        }
-
-        .section-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 30px;
-        }
-
-        .grid-item {
-            background-color: var(--cream);
-            padding: 25px;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-            border-bottom: 3px solid var(--crimson);
-            text-align: center;
-        }
-
-        .grid-item h3 {
-            font-family: 'Playfair Display', serif;
-            color: var(--burgundy);
-            font-size: 1.8rem;
-            margin-bottom: 15px;
-        }
-
-        .grid-item p {
-            font-size: 1rem;
-            color: var(--text-dark);
-        }
-
-        /* Call to Action (CTA) */
-        .cta-section {
-            background-color: var(--crimson);
-            color: var(--cream);
-            text-align: center;
-            padding: 60px 20px;
-            margin-top: 40px;
-        }
-
-        .cta-section h2 {
-            font-family: 'Playfair Display', serif;
-            font-size: 3rem;
-            margin-bottom: 20px;
-            color: var(--gold-accent);
-        }
-
-        .cta-section p {
-            font-size: 1.2rem;
-            max-width: 800px;
-            margin: 0 auto 30px;
-            line-height: 1.7;
-        }
-
-        /* Footer */
-        footer {
-            background-color: var(--dark-wine);
-            color: var(--cream);
-            text-align: center;
-            padding: 30px 20px;
-            margin-top: auto; /* Pushes footer to bottom */
-            box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
+        .verification-badge {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(to bottom right, var(--success), #059669);
+            border-radius: 50%;
             display: flex;
-            flex-wrap: wrap;
-            justify-content: space-around;
-            align-items: flex-start;
-            gap: 20px;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            box-shadow: 0 5px 15px rgba(16, 185, 129, 0.3);
+            animation: pulse 2s infinite;
         }
 
-        .footer-column {
-            flex: 1;
-            min-width: 200px;
-            text-align: left;
-            margin-bottom: 20px;
+        .verification-badge i {
+            font-size: 3.5rem;
+            color: white;
         }
 
-        .footer-column h3 {
-            font-family: 'Playfair Display', serif;
-            color: var(--gold-accent);
-            font-size: 1.4rem;
-            margin-bottom: 15px;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-            padding-bottom: 8px;
-        }
-
-        .footer-column ul {
-            list-style: none;
-        }
-
-        .footer-column ul li {
+        .verification-status {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--success);
             margin-bottom: 10px;
         }
 
-        .footer-column ul li a {
-            color: var(--cream);
-            font-size: 0.95rem;
+        .verification-text {
+            color: var(--gray);
+            font-size: 1.1rem;
+            max-width: 500px;
+            margin: 0 auto;
         }
 
-        .footer-bottom {
-            margin-top: 30px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding-top: 20px;
+        .employee-details {
+            background: var(--light);
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: inset 0 2px 4px var(--shadow);
+        }
+
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 600;
+            margin-bottom: 25px;
+            color: var(--dark-red-primary); /* Dark red for section title */
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            background: linear-gradient(to right, var(--dark-red-primary), var(--dark-red-secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .detail-item {
+            margin-bottom: 18px;
+        }
+
+        .detail-label {
             font-size: 0.9rem;
-            color: rgba(255, 255, 255, 0.7);
-            text-align: center;
-            width: 100%;
+            font-weight: 500;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
 
-        /* Responsive Design */
+        .detail-label i {
+            width: 20px;
+            color: var(--dark-red-secondary); /* Dark red for detail icons */
+        }
+
+        .detail-value {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: var(--dark);
+            padding-left: 28px;
+        }
+
+        .qr-section {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 40px;
+            padding: 30px;
+            background: white;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+            opacity: 0; /* Initially hidden */
+            transform: translateY(20px); /* For animation */
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+
+        .qr-section.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .qr-container {
+            background: white;
+            padding: 15px;
+            border-radius: 12px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .qr-placeholder {
+            width: 150px;
+            height: 150px;
+            background: linear-gradient(135deg, #fcebeb 0%, #f7dada 100%); /* Lighter red tint for QR placeholder */
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--dark-red-primary);
+            font-size: 3rem;
+        }
+
+        .qr-info {
+            max-width: 400px;
+        }
+
+        .qr-info h3 {
+            font-size: 1.4rem;
+            color: var(--dark-red-primary); /* Dark red for QR info heading */
+            margin-bottom: 15px;
+        }
+
+        .qr-info p {
+            color: var(--gray);
+            margin-bottom: 20px;
+        }
+
+        .footer {
+            text-align: center;
+            padding: 25px;
+            background: var(--light);
+            color: var(--gray);
+            font-size: 0.9rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer a {
+            color: var(--dark-red-primary); /* Dark red for footer link */
+            text-decoration: none;
+        }
+
+        /* Loader styles */
+        .loader-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            transition: opacity 0.3s ease-out;
+        }
+
+        .loader {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--dark-red-primary); /* Dark red for loader */
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes pulse {
+            0% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4);
+            }
+            70% {
+                box-shadow: 0 0 0 12px rgba(16, 185, 129, 0);
+            }
+            100% {
+                box-shadow: 0 0 0 0 rgba(16, 185, 129, 0);
+            }
+        }
+
         @media (max-width: 768px) {
-            .header-content {
+            .header {
+                padding: 25px 20px;
+            }
+            
+            .content {
+                padding: 30px 20px;
+            }
+            
+            .qr-section {
                 flex-direction: column;
                 text-align: center;
+                gap: 25px;
             }
-
-            nav ul {
-                margin-top: 20px;
-                flex-direction: column;
-                align-items: center;
-            }
-
-            nav ul li {
-                margin: 10px 0;
-            }
-
-            .hero-section h1 {
-                font-size: 2.8rem;
-            }
-
-            .hero-section p {
-                font-size: 1.1rem;
-            }
-
-            .section h2 {
-                font-size: 2rem;
-            }
-
-            .section-grid {
-                grid-template-columns: 1fr;
-            }
-
-            .cta-section h2 {
-                font-size: 2.2rem;
-            }
-
-            .cta-section p {
-                font-size: 1rem;
-            }
-
-            .footer-content {
-                flex-direction: column;
-                align-items: center;
-            }
-
-            .footer-column {
-                text-align: center;
-                margin-bottom: 30px;
+            
+            .qr-info {
+                order: -1;
             }
         }
     </style>
 </head>
 <body>
-
-    <header>
-        <div class="header-content">
-            <div class="logo">Crimson Aura</div>
-            <nav>
-                <ul>
-                    <li><a href="#home">Home</a></li>
-                    <li><a href="#about">About</a></li>
-                    <li><a href="#services">Services</a></li>
-                    <li><a href="#gallery">Gallery</a></li>
-                    <li><a href="#contact">Contact</a></li>
-                </ul>
-            </nav>
+    <div class="container">
+        <div class="loader-overlay" id="loaderOverlay">
+            <div class="loader"></div>
         </div>
-    </header>
 
-    <main>
-        <section class="hero-section" id="home">
-            <h1>Experience Unparalleled Sophistication</h1>
-            <p>Where deep emotion meets exquisite design. Discover a realm of timeless elegance and bespoke experiences tailored just for you.</p>
-            <a href="#services" class="btn">Explore Our Offerings</a>
-        </section>
-
-        <div class="container">
-            <section class="section" id="about">
-                <h2>Our Vision</h2>
-                <p>At Crimson Aura, we believe in crafting experiences that resonate with the soul. Our journey began with a passion for excellence and a commitment to delivering unparalleled quality in every detail. We blend traditional craftsmanship with modern innovation to create products and services that stand the test of time, reflecting sophistication and deep emotional connection.</p>
-                <p>We are dedicated to a philosophy of refinement, ensuring that every interaction with Crimson Aura is memorable and truly unique. Our clients are not just customers; they are discerning individuals who appreciate the finer things in life, seeking depth, richness, and an aura of distinction.</p>
-            </section>
-
-            <section class="section" id="services">
-                <h2>Our Services</h2>
-                <div class="section-grid">
-                    <div class="grid-item">
-                        <h3>Bespoke Creations</h3>
-                        <p>Tailored designs and unique pieces crafted to your exact specifications, reflecting your personal style and story.</p>
+        <div class="header">
+            <h1>MKITM</h1>
+            <p>Powered by DEPARTMENT OF TOURISM</p>
+            <p>A Govt. of India entity.</p>
+        </div>
+        
+        <div class="logo-container">
+            <div class="logo">
+                <i class="fas fa-cube"></i>
+            </div>
+        </div>
+        
+        <div class="content" id="mainContent">
+            <div class="verification-section">
+                <div class="verification-badge">
+                    <i class="fas fa-check"></i>
+                </div>
+                <h2 class="verification-status">Employee Verified Successfully!</h2>
+                <p class="verification-text">This employee's credentials have been authenticated and verified by our corporate verification system.</p>
+            </div>
+            
+            <div class="employee-details">
+                <h3 class="section-title"><i class="fas fa-id-card"></i> Employee Details</h3>
+                <div class="details-grid">
+                    <div class="detail-item">
+                        <div class="detail-label"><i class="fas fa-user"></i> Employee Name</div>
+                        <div class="detail-value">Ranjeet Kumar</div>
                     </div>
-                    <div class="grid-item">
-                        <h3>Exclusive Consultations</h3>
-                        <p>Receive personalized guidance from our experts to bring your most ambitious visions to life with precision.</p>
+                    <div class="detail-item">
+                        <div class="detail-label"><i class="fas fa-id-badge"></i> License No.</div>
+                        <div class="detail-value">11316</div>
                     </div>
-                    <div class="grid-item">
-                        <h3>Curated Collections</h3>
-                        <p>Explore our limited-edition selections, each item meticulously chosen for its quality, beauty, and rarity.</p>
+                    <div class="detail-item">
+                        <div class="detail-label"><i class="fas fa-building"></i> Valid upto</div>
+                        <div class="detail-value">N/A</div>
                     </div>
-                    <div class="grid-item">
-                        <h3>Event Elegance</h3>
-                        <p>Elevate your special occasions with our sophisticated planning and design services, leaving a lasting impression.</p>
+                    <div class="detail-item">
+                        <div class="detail-label"><i class="fas fa-briefcase"></i> Father's name</div>
+                        <div class="detail-value">Surendra Kumar</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label"><i class="fas fa-user-check"></i> Guide Status</div>
+                        <div class="detail-value"><span style="color: var(--success); font-weight: 600;">Active</span></div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label"><i class="fas fa-calendar-alt"></i> Date of Birth</div>
+                        <div class="detail-value">July 20, 1990</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label"><i class="fas fa-envelope"></i> Adhar No.</div>
+                        <div class="detail-value">9371 4695 0391</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label"><i class="fas fa-phone-alt"></i>Phone</div>
+                        <div class="detail-value">+91 89419 94444</div>
+                    </div>
+                    <div class="detail-item">
+                        <div class="detail-label"><i class="fas fa-map-marker-alt"></i>Address</div>
+                        <div class="detail-value">36/34 P, Madhuvan colony, Deori road, Agra - 282001 (U.P.)</div>
                     </div>
                 </div>
-            </section>
-
-            <section class="section" id="gallery">
-                <h2>Our Gallery</h2>
-                <p style="text-align: center;">A glimpse into our world of refined artistry. Each image reflects the beauty and depth inherent in our work.</p>
-                <div class="section-grid">
-                    <div class="grid-item">
-                        <img src="https://source.unsplash.com/400x300/?red+fabric" alt="Red Fabric" style="width:100%; border-radius: 5px; margin-bottom: 10px;">
-                        <h3>Rich Textures</h3>
-                    </div>
-                    <div class="grid-item">
-                        <img src="https://source.unsplash.com/400x300/?luxury+design" alt="Luxury Design" style="width:100%; border-radius: 5px; margin-bottom: 10px;">
-                        <h3>Fine Details</h3>
-                    </div>
-                    <div class="grid-item">
-                        <img src="https://source.unsplash.com/400x300/?red+wine" alt="Red Wine" style="width:100%; border-radius: 5px; margin-bottom: 10px;">
-                        <h3>Deep Hues</h3>
+            </div>
+            
+            <div class="qr-section" id="qrSection">
+                <div class="qr-info">
+                    <h3>QR Code Verification</h3>
+                    <p>This unique QR code contains encrypted verification data. Scan with the InnovateCorp Verify app to authenticate this employee's credentials.</p>
+                    <p><small>Verification ID: MKITM/25/0001</small></p>
+                </div>
+                <div class="qr-container">
+                    <div class="qr-placeholder">
+                        <i class="fas fa-qrcode"></i>
                     </div>
                 </div>
-            </section>
-        </div>
-
-        <section class="cta-section" id="contact">
-            <h2>Ready to Begin Your Experience?</h2>
-            <p>Connect with us to explore how Crimson Aura can transform your desires into reality. Our team is ready to provide you with an exceptional service.</p>
-            <a href="#" class="btn">Contact Us Today</a>
-        </section>
-    </main>
-
-    <footer>
-        <div class="footer-content">
-            <div class="footer-column">
-                <h3>About Us</h3>
-                <ul>
-                    <li><a href="#about">Our Story</a></li>
-                    <li><a href="#">Team</a></li>
-                    <li><a href="#">Careers</a></li>
-                </ul>
-            </div>
-            <div class="footer-column">
-                <h3>Services</h3>
-                <ul>
-                    <li><a href="#services">Bespoke</a></li>
-                    <li><a href="#services">Consultations</a></li>
-                    <li><a href="#services">Collections</a></li>
-                </ul>
-            </div>
-            <div class="footer-column">
-                <h3>Support</h3>
-                <ul>
-                    <li><a href="#">FAQ</a></li>
-                    <li><a href="#">Privacy Policy</a></li>
-                    <li><a href="#">Terms of Service</a></li>
-                </ul>
-            </div>
-            <div class="footer-column">
-                <h3>Connect</h3>
-                <ul>
-                    <li><a href="#">Email: info@crimsonaura.com</a></li>
-                    <li><a href="#">Phone: +1 234 567 8900</a></li>
-                    <li><a href="#">Address: 123 Elegance Lane, Metropolis</a></li>
-                </ul>
             </div>
         </div>
-        <div class="footer-bottom">
-            <p>&copy; 2025 Crimson Aura. All rights reserved.</p>
+        
+        <div class="footer">
+            <p>© 2025 MKITM. All rights reserved. | Employee Verification System v3.2</p>
+            <p>For assistance, contact <a href="#">verification-support@MKITM.com</a></p>
         </div>
-    </footer>
+    </div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const loaderOverlay = document.getElementById('loaderOverlay');
+            const mainContent = document.getElementById('mainContent');
+            const qrSection = document.getElementById('qrSection');
+
+            // Hide loader and show content after 0.3 seconds
+            setTimeout(() => {
+                loaderOverlay.style.opacity = '0';
+                setTimeout(() => {
+                    loaderOverlay.style.display = 'none';
+                    mainContent.classList.add('show');
+                    qrSection.classList.add('show');
+                    // Start pulse animation after content is visible
+                    document.querySelector('.verification-badge').style.animation = 'pulse 2s infinite';
+                }, 300); // This should match the transition duration for loaderOverlay
+            }, 300); // Loader visible for 0.3 seconds
+        });
+    </script>
 </body>
 </html>
