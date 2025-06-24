@@ -7,9 +7,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --primary: #2563eb;
-            --primary-dark: #1d4ed8;
-            --secondary: #0ea5e9;
+            --yellow-primary: #FFD700; /* Gold */
+            --yellow-secondary: #FFA500; /* Orange-Yellow */
+            --yellow-light: #FFFACD; /* Lemon Chiffon */
+            --yellow-dark: #B8860B; /* Dark Goldenrod */
             --success: #10b981;
             --dark: #1e293b;
             --light: #f8fafc;
@@ -26,7 +27,7 @@
         }
 
         body {
-            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            background: linear-gradient(135deg, var(--yellow-light) 0%, #FFFDE7 100%); /* Light yellow tint background */
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -50,8 +51,8 @@
         }
 
         .header {
-            background: linear-gradient(to right, var(--primary), var(--secondary));
-            color: white;
+            background: linear-gradient(to right, var(--yellow-primary), var(--yellow-secondary));
+            color: var(--dark); /* Changed text color to dark for contrast */
             padding: 30px;
             text-align: center;
             position: relative;
@@ -87,8 +88,8 @@
 
         .logo {
             font-size: 2.5rem;
-            color: var(--primary);
-            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: var(--yellow-primary);
+            background: linear-gradient(to right, var(--yellow-primary), var(--yellow-secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -153,14 +154,14 @@
             font-size: 1.4rem;
             font-weight: 600;
             margin-bottom: 25px;
-            color: var(--primary-dark);
+            color: var(--yellow-dark); /* Darker yellow for section title */
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
         .section-title i {
-            background: linear-gradient(to right, var(--primary), var(--secondary));
+            background: linear-gradient(to right, var(--yellow-primary), var(--yellow-secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -189,7 +190,7 @@
 
         .detail-label i {
             width: 20px;
-            color: var(--secondary);
+            color: var(--yellow-secondary); /* Yellow for detail icons */
         }
 
         .detail-value {
@@ -229,12 +230,12 @@
         .qr-placeholder {
             width: 150px;
             height: 150px;
-            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            background: linear-gradient(135deg, #FFFADD 0%, #FFEFD5 100%); /* Lighter yellow tint for QR placeholder */
             border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--primary);
+            color: var(--yellow-primary);
             font-size: 3rem;
         }
 
@@ -244,7 +245,7 @@
 
         .qr-info h3 {
             font-size: 1.4rem;
-            color: var(--primary-dark);
+            color: var(--yellow-dark); /* Darker yellow for QR info heading */
             margin-bottom: 15px;
         }
 
@@ -263,7 +264,7 @@
         }
 
         .footer a {
-            color: var(--primary);
+            color: var(--yellow-dark); /* Darker yellow for footer link */
             text-decoration: none;
         }
 
@@ -284,7 +285,7 @@
 
         .loader {
             border: 5px solid #f3f3f3;
-            border-top: 5px solid var(--primary);
+            border-top: 5px solid var(--yellow-primary); /* Yellow for loader */
             border-radius: 50%;
             width: 50px;
             height: 50px;
@@ -337,8 +338,8 @@
 
         <div class="header">
             <h1>MKITM</h1>
-            <p>Powered by  DEPARTMENT OF TOURISM</p>
-          <p>A Govt. of India entity.</p>
+            <p>Powered by DEPARTMENT OF TOURISM</p>
+            <p>A Govt. of India entity.</p>
         </div>
         
         <div class="logo-container">
@@ -391,7 +392,7 @@
                         <div class="detail-label"><i class="fas fa-phone-alt"></i>Phone</div>
                         <div class="detail-value">+91 89419 94444</div>
                     </div>
-                  <div class="detail-item">
+                    <div class="detail-item">
                         <div class="detail-label"><i class="fas fa-map-marker-alt"></i>Address</div>
                         <div class="detail-value">36/34 P, Madhuvan colony, Deori road, Agra - 282001 (U.P.)</div>
                     </div>
