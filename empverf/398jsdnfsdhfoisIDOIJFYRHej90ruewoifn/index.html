@@ -7,11 +7,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
-            --maroon: #800000;
-            --burgundy: #800020;
-            --crimson: #DC143C;
-            --dark-red-primary: var(--burgundy); /* Main dark red */
-            --dark-red-secondary: var(--crimson); /* Complementary dark red */
+            --yellow-primary: #FFD700; /* Gold */
+            --yellow-secondary: #FFA500; /* Orange-Yellow */
+            --yellow-light: #FFFACD; /* Lemon Chiffon */
+            --yellow-dark: #B8860B; /* Dark Goldenrod */
             --success: #10b981;
             --dark: #1e293b;
             --light: #f8fafc;
@@ -28,7 +27,7 @@
         }
 
         body {
-            background: linear-gradient(135deg, #fff0f0 0%, #ffe0e0 100%); /* Lighter red tint background */
+            background: linear-gradient(135deg, var(--yellow-light) 0%, #FFFDE7 100%); /* Light yellow tint background */
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -36,7 +35,8 @@
             padding: 20px;
             color: var(--dark);
             line-height: 1.6;
-            overflow: hidden; /* Prevent scrollbar during loading */
+            /* Removed overflow: hidden; from here to allow scrolling on body */
+            position: relative; /* Added for loader positioning relative to body */
         }
 
         .container {
@@ -44,16 +44,16 @@
             width: 100%;
             background: white;
             border-radius: 16px;
-            overflow: hidden;
+            overflow: hidden; /* Kept on container to ensure its content is within bounds */
             box-shadow: 0 12px 30px rgba(0, 0, 0, 0.1);
             display: flex;
             flex-direction: column;
-            position: relative; /* For loader positioning */
+            /* Removed position: relative; from here as it's now on body, or not needed for loader */
         }
 
         .header {
-            background: linear-gradient(to right, var(--dark-red-primary), var(--dark-red-secondary));
-            color: white;
+            background: linear-gradient(to right, var(--yellow-primary), var(--yellow-secondary));
+            color: var(--dark); /* Changed text color to dark for contrast */
             padding: 30px;
             text-align: center;
             position: relative;
@@ -89,8 +89,8 @@
 
         .logo {
             font-size: 2.5rem;
-            color: var(--dark-red-primary);
-            background: linear-gradient(to right, var(--dark-red-primary), var(--dark-red-secondary));
+            color: var(--yellow-primary);
+            background: linear-gradient(to right, var(--yellow-primary), var(--yellow-secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -155,14 +155,14 @@
             font-size: 1.4rem;
             font-weight: 600;
             margin-bottom: 25px;
-            color: var(--dark-red-primary); /* Dark red for section title */
+            color: var(--yellow-dark); /* Darker yellow for section title */
             display: flex;
             align-items: center;
             gap: 10px;
         }
 
         .section-title i {
-            background: linear-gradient(to right, var(--dark-red-primary), var(--dark-red-secondary));
+            background: linear-gradient(to right, var(--yellow-primary), var(--yellow-secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
@@ -191,7 +191,7 @@
 
         .detail-label i {
             width: 20px;
-            color: var(--dark-red-secondary); /* Dark red for detail icons */
+            color: var(--yellow-secondary); /* Yellow for detail icons */
         }
 
         .detail-value {
@@ -231,12 +231,12 @@
         .qr-placeholder {
             width: 150px;
             height: 150px;
-            background: linear-gradient(135deg, #fcebeb 0%, #f7dada 100%); /* Lighter red tint for QR placeholder */
+            background: linear-gradient(135deg, #FFFADD 0%, #FFEFD5 100%); /* Lighter yellow tint for QR placeholder */
             border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: var(--dark-red-primary);
+            color: var(--yellow-primary);
             font-size: 3rem;
         }
 
@@ -246,7 +246,7 @@
 
         .qr-info h3 {
             font-size: 1.4rem;
-            color: var(--dark-red-primary); /* Dark red for QR info heading */
+            color: var(--yellow-dark); /* Darker yellow for QR info heading */
             margin-bottom: 15px;
         }
 
@@ -265,13 +265,13 @@
         }
 
         .footer a {
-            color: var(--dark-red-primary); /* Dark red for footer link */
+            color: var(--yellow-dark); /* Darker yellow for footer link */
             text-decoration: none;
         }
 
         /* Loader styles */
         .loader-overlay {
-            position: absolute;
+            position: fixed; /* Changed to fixed to cover the entire viewport */
             top: 0;
             left: 0;
             width: 100%;
@@ -286,7 +286,7 @@
 
         .loader {
             border: 5px solid #f3f3f3;
-            border-top: 5px solid var(--dark-red-primary); /* Dark red for loader */
+            border-top: 5px solid var(--yellow-primary); /* Yellow for loader */
             border-radius: 50%;
             width: 50px;
             height: 50px;
