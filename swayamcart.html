@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SwayamCart | Swadeshi Store</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* --- 1. DESIGN SYSTEM --- */
+        :root {
+            --primary: #432818; /* Deep Earthy Brown */
+            --primary-hover: #5d3a24;
+            --accent: #ea580c; /* Burnt Orange/Terracotta */
+            --accent-hover: #c2410c;
+            --bg-body: #fffbf2; /* Warm Cream */
+            --bg-card: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border: #e2e8f0;
+            --danger: #ef4444;
+            --success: #15803d;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            --radius: 12px;
+            --transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg-body); color: var(--text-main); padding-top: 80px; padding-bottom: 40px; }
+        img { max-width: 100%; display: block; object-fit: cover; }
+        
+        /* --- 2. UTILITY & LAYOUT --- */
+        .container { max-width: 1380px; margin: 0 auto; padding: 0 24px; }
+        .hidden { display: none !important; }
+        .flex { display: flex; }
+        .flex-col { flex-direction: column; }
+        .items-center { align-items: center; }
+        .justify-between { justify-content: space-between; }
+        .grid { display: grid; gap: 24px; }
+        .gap-2 { gap: 8px; } .gap-4 { gap: 16px; } .gap-6 { gap: 24px; }
+        
+        /* --- 3. COMPONENTS --- */
+        .btn {
+            display: inline-flex; align-items: center; justify-content: center;
+            padding: 10px 20px; border-radius: 8px; font-weight: 500; font-size: 0.95rem;
+            cursor: pointer; border: 1px solid transparent; transition: var(--transition); gap: 8px;
+        }
+        .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-primary:hover:not(:disabled) { background: var(--primary-hover); transform: translateY(-1px); }
+        .btn-outline { background: white; border-color: var(--border); color: var(--text-main); }
+        .btn-outline:hover:not(:disabled) { border-color: var(--text-muted); background: #f8fafc; }
+        .btn-danger { background: #fee2e2; color: var(--danger); }
+        .btn-icon { padding: 8px; border-radius: 6px; }
+
+        .input-group { margin-bottom: 16px; }
+        .input-label { display: block; margin-bottom: 6px; font-weight: 500; font-size: 0.9rem; color: var(--text-main); }
+        .input-field, .select-field {
+            width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 8px;
+            outline: none; transition: var(--transition); font-size: 0.95rem; background: white;
+        }
+        .input-field:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(234, 88, 12, 0.1); }
+
+        .card { background: var(--bg-card); border-radius: var(--radius); border: 1px solid var(--border); padding: 24px; box-shadow: var(--shadow); }
+
+        .badge { padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; white-space: nowrap;}
+        .badge-low { background: #ffedd5; color: var(--warning); }
+        .badge-out { background: #fee2e2; color: var(--danger); }
+        .badge-stock { background: #dcfce7; color: var(--success); }
+        
+        /* Order Status Badges */
+        .badge-pending { background: #fef3c7; color: var(--warning); }
+        .badge-paid { background: #e0f2fe; color: var(--info); }
+        .badge-shipped { background: #e0e7ff; color: #4338ca; }
+        .badge-delivered { background: #dcfce7; color: var(--success); }
+
+        /* --- 4. NAVIGATION --- */
+        .navbar {
+            position: fixed; top: 0; left: 0; right: 0; height: 72px; z-index: 100;
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border);
+        }
+        .nav-inner { height: 100%; display: flex; justify-content: space-between; align-items: center; }
+        
+        .logo-container { height: 40px; cursor: pointer; display: flex; align-items: center; gap: 10px; }
+        .logo-img { height: 100%; width: auto; object-fit: contain; }
+        .logo-text { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.5px; color: var(--primary); }
+
+        .nav-menu { display: flex; gap: 8px; }
+        .nav-link {
+            padding: 8px 16px; border-radius: 8px; color: var(--text-muted); font-weight: 500;
+            cursor: pointer; transition: var(--transition);
+        }
+        .nav-link.active, .nav-link:hover { background: #f1f5f9; color: var(--primary); }
+        .cart-btn { position: relative; padding: 10px; cursor: pointer; color: var(--text-main); }
+        .cart-count {
+            position: absolute; top: 0; right: 0; background: var(--accent); color: white;
+            font-size: 0.7rem; font-weight: 700; width: 18px; height: 18px;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+        }
+
+        /* --- 5. STORE GRID --- */
+        .products-grid { grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); row-gap: 32px; column-gap: 24px; }
+        .product-card {
+            background: white; border-radius: var(--radius); border: 1px solid var(--border);
+            overflow: hidden; transition: var(--transition); position: relative; display: flex; flex-direction: column;
+        }
+        .product-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-lg); border-color: var(--accent); }
+        .p-img-wrap { height: 260px; overflow: hidden; position: relative; background: #f8fafc; cursor: pointer; }
+        .p-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
+        .product-card:hover .p-img { transform: scale(1.05); }
+        .p-content { padding: 16px; flex-grow: 1; display: flex; flex-direction: column; }
+        .p-cat { font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); font-weight: 600; letter-spacing: 0.5px; margin-bottom: 4px; }
+        .p-title { font-weight: 600; font-size: 1.05rem; margin-bottom: 4px; color: var(--primary); line-height: 1.4; }
+        .p-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; margin-top: auto; padding-top: 10px; }
+        .p-price { font-weight: 700; font-size: 1.2rem; color: var(--text-main); }
+        .p-stock { font-size: 0.8rem; color: var(--text-muted); }
+
+        /* --- 6. MODAL --- */
+        .overlay {
+            position: fixed; inset: 0; background: rgba(44, 26, 17, 0.7); backdrop-filter: blur(4px);
+            z-index: 200; display: flex; align-items: center; justify-content: center; opacity: 0; pointer-events: none; transition: var(--transition);
+        }
+        .overlay.active { opacity: 1; pointer-events: all; }
+        .modal {
+            background: white; width: 90%; max-width: 900px; border-radius: 16px; max-height: 90vh;
+            display: grid; grid-template-columns: 1fr 1fr; overflow: hidden; box-shadow: var(--shadow-lg);
+        }
+        .modal-gallery { background: #f1f5f9; padding: 24px; display: flex; flex-direction: column; gap: 16px; align-items: center; justify-content: center; }
+        .main-image { width: 100%; height: 400px; object-fit: contain; border-radius: 8px; mix-blend-mode: multiply;}
+        .modal-info { padding: 40px; overflow-y: auto; display: flex; flex-direction: column; }
+        .modal-close { position: absolute; top: 20px; right: 20px; cursor: pointer; font-size: 1.5rem; color: var(--text-muted); z-index: 10; }
+
+        /* --- 7. CART --- */
+        .split-layout { display: grid; grid-template-columns: 1.5fr 1fr; gap: 32px; }
+        .cart-item { display: flex; gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--border); }
+        .cart-img { width: 80px; height: 80px; border-radius: 8px; object-fit: cover; background: #f1f5f9; }
+        .checkout-form { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+        .col-full { grid-column: span 2; }
+
+        /* --- 8. LOADER --- */
+        #loader {
+            position: fixed; inset: 0; background: #ffffff; z-index: 9999;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            transition: opacity 0.5s ease-out;
+        }
+        #loader.fade-out { opacity: 0; pointer-events: none; }
+        .loader-logo { width: 120px; animation: pulse 0.5s infinite alternate; }
+        @keyframes pulse { from { transform: scale(1); opacity: 0.8; } to { transform: scale(1.1); opacity: 1; } }
+
+        /* --- 9. ADMIN --- */
+        .admin-table-wrap { overflow-x: auto; margin-bottom: 8px; }
+        .admin-table { width: 100%; border-collapse: collapse; min-width: 600px; }
+        .admin-table th { text-align: left; padding: 12px; border-bottom: 2px solid var(--border); color: var(--text-muted); font-size: 0.85rem; }
+        .admin-table td { padding: 12px; border-bottom: 1px solid var(--border); vertical-align: middle; }
+        .table-img { width: 40px; height: 40px; border-radius: 4px; object-fit: cover; }
+        
+        .status-select {
+            padding: 6px 10px; border-radius: 6px; border: 1px solid var(--border);
+            font-size: 0.85rem; background: white; cursor: pointer;
+        }
+
+        .toast {
+            position: fixed; bottom: 24px; right: 24px; background: var(--primary); color: white;
+            padding: 12px 24px; border-radius: 8px; box-shadow: var(--shadow-lg);
+            transform: translateY(100px); transition: transform 0.3s; z-index: 300;
+        }
+        .toast.show { transform: translateY(0); }
+
+        @media (max-width: 768px) {
+            .modal { grid-template-columns: 1fr; height: 100%; max-height: 100%; border-radius: 0; overflow-y: scroll; }
+            .split-layout { grid-template-columns: 1fr; }
+            .checkout-form { grid-template-columns: 1fr; }
+            .col-full { grid-column: span 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="loader">
+        <img src="Logo.png" alt="Loading..." class="loader-logo">
+    </div>
+
+    <nav class="navbar">
+        <div class="container nav-inner">
+            <div class="logo-container" onclick="app.nav('store')">
+                <img src="Logo.png" alt="SwayamCart Logo" class="logo-img">
+                <span class="logo-text">SwayamCart.</span>
+            </div>
+            <div class="nav-menu">
+                <div class="nav-link active" id="link-store" onclick="app.nav('store')">Store</div>
+                <div class="nav-link" id="link-admin" onclick="app.nav('admin')">Admin Panel</div>
+            </div>
+            <div class="cart-btn" onclick="app.nav('cart')">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path>
+                    <line x1="3" y1="6" x2="21" y2="6"></line>
+                    <path d="M16 10a4 4 0 0 1-8 0"></path>
+                </svg>
+                <div class="cart-count" id="cart-badge">0</div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        
+        <section id="view-store">
+            <div style="margin: 32px 0 40px; text-align: center;">
+                <h1 style="font-size: 2.5rem; font-weight: 800; color: var(--primary); margin-bottom: 8px;">Explore Swadeshi</h1>
+                <p style="color: var(--text-muted);">Curated excellence from India's finest artisans.</p>
+            </div>
+            <div id="product-grid" class="grid products-grid">
+                </div>
+        </section>
+
+        <section id="view-cart" class="hidden">
+            <h2 style="margin: 32px 0;">Checkout</h2>
+            <div class="split-layout">
+                <div>
+                    <div class="card">
+                        <h3 style="margin-bottom: 20px;">Shipping & Payment</h3>
+                        <form id="checkout-form" class="checkout-form" onsubmit="app.processOrder(event)">
+                            <div class="input-group col-full">
+                                <label class="input-label">Full Name</label>
+                                <input type="text" id="cust-name" class="input-field" required placeholder="Aditi Sharma">
+                            </div>
+                            <div class="input-group col-full">
+                                <label class="input-label">Address</label>
+                                <input type="text" id="cust-addr" class="input-field" required placeholder="MG Road, Indiranagar">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">City</label>
+                                <input type="text" class="input-field" required placeholder="Bengaluru">
+                            </div>
+                            <div class="input-group">
+                                <label class="input-label">Pincode</label>
+                                <input type="text" class="input-field" required placeholder="560038">
+                            </div>
+                            
+                            <h3 class="col-full" style="margin: 20px 0 10px;">Payment</h3>
+
+                            <div class="input-group col-full">
+                                <label class="input-label">Payment Method</label>
+                                <select class="select-field" id="payment-method" onchange="app.togglePaymentMethod()">
+                                    <option value="card">Credit/Debit Card</option>
+                                    <option value="upi">UPI (GPay / PhonePe / Paytm)</option>
+                                </select>
+                            </div>
+
+                            <div id="card-fields" class="col-full checkout-form" style="padding:0; gap:16px;">
+                                <div class="input-group col-full">
+                                    <label class="input-label">Card Number</label>
+                                    <input type="text" class="input-field" placeholder="0000 0000 0000 0000">
+                                </div>
+                                <div class="input-group">
+                                    <label class="input-label">Expiry</label>
+                                    <input type="text" class="input-field" placeholder="MM/YY">
+                                </div>
+                                <div class="input-group">
+                                    <label class="input-label">CVV</label>
+                                    <input type="text" class="input-field" placeholder="123">
+                                </div>
+                            </div>
+
+                            <div id="upi-fields" class="col-full hidden">
+                                <div class="input-group">
+                                    <label class="input-label">UPI ID / VPA</label>
+                                    <input type="text" class="input-field" placeholder="username@oksbi">
+                                    <small style="color:var(--text-muted); display:block; margin-top:4px;">Request will be sent to your UPI app.</small>
+                                </div>
+                            </div>
+
+                            <div class="col-full" style="margin-top: 10px;">
+                                <button type="submit" class="btn btn-primary" style="width: 100%; padding: 14px;" id="pay-btn">
+                                    Place Order (₹<span id="btn-total">0.00</span>)
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="card">
+                        <h3 style="margin-bottom: 16px;">Order Summary</h3>
+                        <div id="cart-list" style="max-height: 400px; overflow-y: auto; margin-bottom: 16px;"></div>
+                        <div style="border-top: 1px solid var(--border); padding-top: 16px;">
+                            <div class="flex justify-between" style="margin-bottom: 8px;">
+                                <span style="color: var(--text-muted)">Subtotal</span>
+                                <span id="summary-sub">₹0.00</span>
+                            </div>
+                            <div class="flex justify-between" style="margin-bottom: 8px;">
+                                <span style="color: var(--text-muted)">GST (5%)</span>
+                                <span id="summary-tax">₹0.00</span>
+                            </div>
+                            <div class="flex justify-between" style="font-weight: 700; font-size: 1.2rem; margin-top: 12px;">
+                                <span>Total</span>
+                                <span id="summary-total">₹0.00</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="view-admin" class="hidden">
+            <h2 style="margin: 32px 0;">Admin Dashboard</h2>
+            <div class="split-layout" style="margin-bottom: 32px;">
+                <div class="card" style="height: fit-content;">
+                    <h3 style="margin-bottom: 20px;">Add New Product</h3>
+                    <form onsubmit="app.adminAddProduct(event)">
+                        <div class="input-group">
+                            <label class="input-label">Product Name</label>
+                            <input type="text" name="name" class="input-field" required>
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Category</label>
+                            <input type="text" name="category" class="input-field" required>
+                        </div>
+                        <div class="flex gap-4">
+                            <div class="input-group" style="flex:1">
+                                <label class="input-label">Price (₹)</label>
+                                <input type="number" step="0.01" name="price" class="input-field" required>
+                            </div>
+                            <div class="input-group" style="flex:1">
+                                <label class="input-label">Stock</label>
+                                <input type="number" name="stock" class="input-field" required>
+                            </div>
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Image URL</label>
+                            <input type="url" name="img" class="input-field" required>
+                        </div>
+                        <div class="input-group">
+                            <label class="input-label">Description</label>
+                            <textarea name="desc" class="input-field" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary" style="width: 100%;">Add to Catalog</button>
+                    </form>
+                </div>
+                
+                <div class="card">
+                    <h3 style="margin-bottom: 20px;">Product Inventory</h3>
+                    <div class="admin-table-wrap">
+                        <table class="admin-table">
+                            <thead><tr><th>Image</th><th>Name</th><th>Stock</th><th>Price</th><th>Action</th></tr></thead>
+                            <tbody id="admin-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3 style="margin-bottom: 20px;">Order Management</h3>
+                <div class="admin-table-wrap">
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Date</th>
+                                <th>Customer</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                                <th>Update</th>
+                            </tr>
+                        </thead>
+                        <tbody id="admin-orders-tbody">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <div id="product-modal" class="overlay">
+        <div class="modal" id="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-close" onclick="app.closeModal()">×</div>
+            <div class="modal-gallery">
+                <img id="modal-main-img" class="main-image" src="" alt="">
+            </div>
+            <div class="modal-info">
+                <div id="modal-badge" class="badge badge-low" style="width: fit-content; margin-bottom: 10px;"></div>
+                <h2 id="modal-title" style="font-size: 2rem; margin-bottom: 10px; color: var(--primary);"></h2>
+                <h3 id="modal-price" style="font-size: 1.5rem; color: var(--accent); margin-bottom: 20px;"></h3>
+                <p id="modal-desc" style="color: var(--text-muted); line-height: 1.6; margin-bottom: 30px;"></p>
+                <div style="margin-top: auto;">
+                    <button id="modal-add-btn" class="btn btn-primary" style="width: 100%; padding: 16px; font-size: 1.1rem;" onclick="app.addToCartFromModal()">Add to Cart</button>
+                    <p id="modal-stock-msg" style="text-align: center; margin-top: 10px; font-size: 0.9rem; color: var(--danger);"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast" class="toast">Action Successful</div>
+
+    <script>
+        const app = {
+            data: { products: [], cart: [], orders: [] },
+            currentProduct: null,
+
+            init() {
+                setTimeout(() => document.getElementById('loader').classList.add('fade-out'), 500);
+
+                // Using v5 key to ensure new order data structure is loaded
+                if(localStorage.getItem('SwayamCart_data_v5')) {
+                    this.data = JSON.parse(localStorage.getItem('SwayamCart_data_v5'));
+                    if(!this.data.orders) this.data.orders = []; // safety check
+                } else {
+                    this.seedData();
+                }
+                this.renderStore();
+                this.updateCartUI();
+            },
+
+            seedData() {
+                // 28 Distinct Swadeshi Products
+                this.data.products = [
+                    { id: 1, name: "Khadi Cotton Kurta", category: "Apparel", price: 1299, stock: 15, desc: "Breathable, hand-spun organic cotton kurta tailored for comfort.", img: "https://images.unsplash.com/photo-1630759884511-9a70716c5b9f?auto=format&fit=crop&w=600&q=80" },
+                    { id: 2, name: "Banarasi Silk Saree", category: "Apparel", price: 4500, stock: 5, desc: "Classic red silk saree with intricate gold zari work from Varanasi.", img: "https://images.unsplash.com/photo-1610189012906-4783fdae2c26?auto=format&fit=crop&w=600&q=80" },
+                    { id: 3, name: "Jaipur Blue Pottery", category: "Decor", price: 850, stock: 8, desc: "Hand-painted floral vase using traditional blue glaze techniques.", img: "https://images.unsplash.com/photo-1610701596007-11502861dcfa?auto=format&fit=crop&w=600&q=80" },
+                    { id: 4, name: "Kashmiri Saffron (1g)", category: "Spices", price: 550, stock: 40, desc: "Premium Mongra saffron known for deep aroma and color.", img: "https://images.unsplash.com/photo-1532336414038-cf19250c5757?auto=format&fit=crop&w=600&q=80" },
+                    { id: 5, name: "Handcrafted Brass Diya", category: "Decor", price: 450, stock: 20, desc: "Solid brass oil lamp for spiritual and festive decor.", img: "https://images.unsplash.com/photo-1603816641837-705327293155?auto=format&fit=crop&w=600&q=80" },
+                    { id: 6, name: "Assam Orthodox Tea", category: "Food", price: 350, stock: 25, desc: "Rich, malty black tea leaves from the gardens of Assam.", img: "https://images.unsplash.com/photo-1597481499750-3e6b22637e12?auto=format&fit=crop&w=600&q=80" },
+                    { id: 7, name: "Kolhapuri Chappals", category: "Footwear", price: 1100, stock: 10, desc: "Traditional vegetable-tanned leather sandals.", img: "https://images.unsplash.com/photo-1550997193-479632eb1e9c?auto=format&fit=crop&w=600&q=80" }, 
+                    { id: 8, name: "Terracotta Horse", category: "Decor", price: 600, stock: 12, desc: "Bankura style terracotta horse statue for home display.", img: "https://images.unsplash.com/photo-1624141675765-a868512dd4b9?auto=format&fit=crop&w=600&q=80" },
+                    { id: 9, name: "Organic Turmeric", category: "Spices", price: 180, stock: 50, desc: "High-curcumin Haldi powder sourced from Meghalaya.", img: "https://images.unsplash.com/photo-1615485500704-8e99099d9d09?auto=format&fit=crop&w=600&q=80" },
+                    { id: 10, name: "Copper Water Bottle", category: "Wellness", price: 950, stock: 18, desc: "Pure copper bottle for ayurvedic health benefits.", img: "https://images.unsplash.com/photo-1605646199346-6014e7a83d2e?auto=format&fit=crop&w=600&q=80" },
+                    { id: 11, name: "Jute Tote Bag", category: "Accessories", price: 299, stock: 30, desc: "Eco-friendly, durable natural jute fiber bag.", img: "https://images.unsplash.com/photo-1598532163257-ae3c6b2524b6?auto=format&fit=crop&w=600&q=80" },
+                    { id: 12, name: "Sandalwood Incense", category: "Wellness", price: 150, stock: 60, desc: "Hand-rolled agarbatti with pure sandalwood oil.", img: "https://images.unsplash.com/photo-1615568581020-e25f187a02c8?auto=format&fit=crop&w=600&q=80" },
+                    { id: 13, name: "Madhubani Painting", category: "Art", price: 2200, stock: 4, desc: "Original folk art painting on handmade paper.", img: "https://images.unsplash.com/photo-1545642412-1f4d95856c9a?auto=format&fit=crop&w=600&q=80" },
+                    { id: 14, name: "Ayurvedic Soap Set", category: "Wellness", price: 400, stock: 22, desc: "Neem, Tulsi, and Turmeric handmade soaps.", img: "https://images.unsplash.com/photo-1600607686527-6fb886090705?auto=format&fit=crop&w=600&q=80" },
+                    { id: 15, name: "Silver Anklets (Payal)", category: "Jewelry", price: 3200, stock: 7, desc: "Sterling silver anklets with traditional motifs.", img: "https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?auto=format&fit=crop&w=600&q=80" },
+                    { id: 16, name: "Wooden Chess Set", category: "Games", price: 1800, stock: 6, desc: "Hand-carved Sheesham wood folding chess set.", img: "https://images.unsplash.com/photo-1529699211952-734e80c4d42b?auto=format&fit=crop&w=600&q=80" },
+                    { id: 17, name: "Phulkari Dupatta", category: "Apparel", price: 1400, stock: 9, desc: "Vibrant embroidered floral scarf from Punjab.", img: "https://images.unsplash.com/photo-1617627143750-d86bc21e42bb?auto=format&fit=crop&w=600&q=80" },
+                    { id: 18, name: "Masala Chai Mix", category: "Food", price: 250, stock: 35, desc: "Aromatic blend of cardamom, ginger, cloves, and cinnamon.", img: "https://images.unsplash.com/photo-1596040033229-a9821ebd058d?auto=format&fit=crop&w=600&q=80" },
+                    { id: 19, name: "Coconut Shell Bowls", category: "Kitchen", price: 500, stock: 16, desc: "Set of 2 polished natural coconut shells.", img: "https://images.unsplash.com/photo-1620706857370-e1b9770e8bb1?auto=format&fit=crop&w=600&q=80" },
+                    { id: 20, name: "Mysore Sandal Oil", category: "Wellness", price: 900, stock: 10, desc: "Pure distilled sandalwood essential oil.", img: "https://images.unsplash.com/photo-1608571423902-eed4a5e84e43?auto=format&fit=crop&w=600&q=80" },
+                    { id: 21, name: "Handloom Ikat Fabric", category: "Textile", price: 600, stock: 20, desc: "Double Ikat weave cotton fabric (per meter).", img: "https://images.unsplash.com/photo-1590736969955-71cc94801759?auto=format&fit=crop&w=600&q=80" },
+                    { id: 22, name: "Bamboo Basket", category: "Decor", price: 350, stock: 14, desc: "Woven bamboo storage basket from Northeast India.", img: "https://images.unsplash.com/photo-1616606018374-12944b58b29c?auto=format&fit=crop&w=600&q=80" },
+                    { id: 23, name: "Clay Cooking Pot", category: "Kitchen", price: 550, stock: 11, desc: "Unglazed earthenware pot for slow cooking.", img: "https://images.unsplash.com/photo-1609126294317-575033878b7b?auto=format&fit=crop&w=600&q=80" },
+                    { id: 24, name: "Block Print Bedspread", category: "Home", price: 2100, stock: 8, desc: "Rajasthani hand-block printed cotton bedsheet.", img: "https://images.unsplash.com/photo-1522771753035-1a5b6562f3ba?auto=format&fit=crop&w=600&q=80" },
+                    { id: 25, name: "Marble Coasters", category: "Decor", price: 750, stock: 13, desc: "White marble coasters with inlay work.", img: "https://images.unsplash.com/photo-1582235942646-c56dfd43c242?auto=format&fit=crop&w=600&q=80" },
+                    { id: 26, name: "Chikankari Kurti", category: "Apparel", price: 1600, stock: 12, desc: "White Lucknowi Chikankari embroidery work kurti.", img: "https://images.unsplash.com/photo-1583391725988-543f5f3e5e6e?auto=format&fit=crop&w=600&q=80" },
+                    { id: 27, name: "Brass Masala Dabba", category: "Kitchen", price: 2400, stock: 6, desc: "Traditional brass spice box with engraved lid.", img: "https://images.unsplash.com/photo-1596395345710-186e804f555e?auto=format&fit=crop&w=600&q=80" }, 
+                    { id: 28, name: "Beaded Toran", category: "Decor", price: 400, stock: 20, desc: "Colorful door hanging for festive entrances.", img: "https://images.unsplash.com/photo-1637651633596-d8c7c10b7405?auto=format&fit=crop&w=600&q=80" }
+                ];
+                this.data.orders = [];
+                this.save();
+            },
+
+            save() { localStorage.setItem('SwayamCart_data_v5', JSON.stringify(this.data)); },
+
+            nav(view) {
+                document.querySelectorAll('section').forEach(el => el.classList.add('hidden'));
+                document.getElementById(`view-${view}`).classList.remove('hidden');
+                document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
+                const link = document.getElementById(`link-${view}`);
+                if(link) link.classList.add('active');
+                if(view === 'cart') this.renderCartPage();
+                if(view === 'admin') this.renderAdminPage();
+                window.scrollTo(0, 0);
+            },
+
+            /* --- STORE RENDER --- */
+            renderStore() {
+                const grid = document.getElementById('product-grid');
+                grid.innerHTML = this.data.products.map(p => {
+                    const isOut = p.stock === 0;
+                    return `
+                    <div class="product-card" onclick="app.openProductModal(${p.id})">
+                        <div class="p-img-wrap">
+                            <img src="${p.img}" class="p-img" alt="${p.name}">
+                            ${isOut ? '<div style="position:absolute;top:10px;right:10px;background:#ef4444;color:white;padding:4px 8px;font-size:0.7rem;font-weight:700;border-radius:4px;">SOLD OUT</div>' : ''}
+                        </div>
+                        <div class="p-content">
+                            <div class="p-cat">${p.category}</div>
+                            <div class="p-title">${p.name}</div>
+                            <div class="p-meta">
+                                <span class="p-price">₹${p.price.toFixed(2)}</span>
+                                <span class="p-stock ${p.stock < 5 ? 'text-danger' : ''}">${isOut ? 'No Stock' : p.stock + ' left'}</span>
+                            </div>
+                            <button class="btn btn-outline" style="width:100%" ${isOut ? 'disabled' : ''}>View</button>
+                        </div>
+                    </div>
+                `}).join('');
+            },
+
+            /* --- MODAL --- */
+            openProductModal(id) {
+                this.currentProduct = this.data.products.find(p => p.id === id);
+                if(!this.currentProduct) return;
+                const p = this.currentProduct;
+
+                document.getElementById('modal-title').innerText = p.name;
+                document.getElementById('modal-price').innerText = `₹${p.price.toFixed(2)}`;
+                document.getElementById('modal-desc').innerText = p.desc;
+                document.getElementById('modal-main-img').src = p.img;
+                
+                const badge = document.getElementById('modal-badge');
+                const btn = document.getElementById('modal-add-btn');
+                
+                if (p.stock === 0) {
+                    badge.innerText = "Sold Out"; badge.className = "badge badge-out"; btn.disabled = true; btn.innerText = "Unavailable";
+                } else if (p.stock < 5) {
+                    badge.innerText = `Only ${p.stock} Left`; badge.className = "badge badge-low"; btn.disabled = false; btn.innerText = "Add to Cart";
+                } else {
+                    badge.innerText = "In Stock"; badge.className = "badge badge-stock"; btn.disabled = false; btn.innerText = "Add to Cart";
+                }
+                document.getElementById('product-modal').classList.add('active');
+            },
+
+            closeModal() { document.getElementById('product-modal').classList.remove('active'); this.currentProduct = null; },
+
+            addToCartFromModal() {
+                if(!this.currentProduct) return;
+                this.addToCart(this.currentProduct.id);
+                this.closeModal();
+            },
+
+            addToCart(id) {
+                const product = this.data.products.find(p => p.id === id);
+                const cartItem = this.data.cart.find(i => i.id === id);
+                if ((cartItem ? cartItem.qty : 0) + 1 > product.stock) return this.showToast("Stock limit reached", "error");
+                
+                if (cartItem) cartItem.qty++; else this.data.cart.push({ id: product.id, qty: 1 });
+                this.save(); this.updateCartUI(); this.showToast("Added to cart!");
+            },
+
+            updateCartUI() { document.getElementById('cart-badge').innerText = this.data.cart.reduce((s, i) => s + i.qty, 0); },
+
+            renderCartPage() {
+                const container = document.getElementById('cart-list');
+                const btn = document.getElementById('pay-btn');
+                if (this.data.cart.length === 0) {
+                    container.innerHTML = "<p style='text-align:center;padding:20px;color:var(--text-muted)'>Your cart is empty.</p>";
+                    this.updateSummary(0); btn.disabled = true; return;
+                }
+                btn.disabled = false;
+                let subtotal = 0;
+                container.innerHTML = this.data.cart.map(item => {
+                    const product = this.data.products.find(p => p.id === item.id);
+                    if (!product) return '';
+                    subtotal += product.price * item.qty;
+                    return `
+                        <div class="cart-item">
+                            <img src="${product.img}" class="cart-img">
+                            <div style="flex:1">
+                                <div style="font-weight:600">${product.name}</div>
+                                <div style="font-size:0.9rem;color:var(--text-muted)">₹${product.price} x ${item.qty}</div>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <button class="btn btn-outline btn-icon" onclick="app.changeQty(${item.id}, -1)">-</button>
+                                <span>${item.qty}</span>
+                                <button class="btn btn-outline btn-icon" onclick="app.changeQty(${item.id}, 1)">+</button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+                this.updateSummary(subtotal);
+            },
+
+            togglePaymentMethod() {
+                const method = document.getElementById('payment-method').value;
+                if (method === 'card') {
+                    document.getElementById('card-fields').classList.remove('hidden');
+                    document.getElementById('card-fields').classList.add('grid');
+                    document.getElementById('upi-fields').classList.add('hidden');
+                } else {
+                    document.getElementById('card-fields').classList.add('hidden');
+                    document.getElementById('card-fields').classList.remove('grid');
+                    document.getElementById('upi-fields').classList.remove('hidden');
+                }
+            },
+
+            changeQty(id, delta) {
+                const item = this.data.cart.find(i => i.id === id);
+                const product = this.data.products.find(p => p.id === id);
+                if (delta > 0 && item.qty + 1 > product.stock) return this.showToast("Stock limit reached", "error");
+                item.qty += delta;
+                if (item.qty <= 0) this.data.cart = this.data.cart.filter(i => i.id !== id);
+                this.save(); this.renderCartPage(); this.updateCartUI();
+            },
+
+            updateSummary(subtotal) {
+                const tax = subtotal * 0.05; 
+                document.getElementById('summary-sub').innerText = `₹${subtotal.toFixed(2)}`;
+                document.getElementById('summary-tax').innerText = `₹${tax.toFixed(2)}`;
+                document.getElementById('summary-total').innerText = `₹${(subtotal + tax).toFixed(2)}`;
+                document.getElementById('btn-total').innerText = (subtotal + tax).toFixed(2);
+            },
+
+            processOrder(e) {
+                e.preventDefault();
+                const btn = document.getElementById('pay-btn');
+                const method = document.getElementById('payment-method').value;
+                
+                // Calculate Final Amount
+                const subtotal = this.data.cart.reduce((sum, item) => {
+                     const p = this.data.products.find(x => x.id === item.id);
+                     return sum + (p ? p.price * item.qty : 0);
+                }, 0);
+                const total = subtotal * 1.05;
+
+                // Capture Order
+                const order = {
+                    id: 'ORD-' + Date.now().toString().slice(-6),
+                    customer: document.getElementById('cust-name').value,
+                    address: document.getElementById('cust-addr').value,
+                    items: [...this.data.cart],
+                    total: total,
+                    date: new Date().toLocaleDateString(),
+                    method: method,
+                    status: 'Pending' // Default Status
+                };
+
+                btn.disabled = true; btn.innerText = method === 'upi' ? "Waiting for UPI..." : "Processing...";
+                
+                setTimeout(() => {
+                    // Update Stock
+                    this.data.cart.forEach(c => { const p = this.data.products.find(x => x.id === c.id); if(p) p.stock -= c.qty; });
+                    
+                    // Save Order & Clear Cart
+                    this.data.orders.push(order);
+                    this.data.cart = []; 
+                    this.save(); 
+                    this.updateCartUI();
+
+                    btn.disabled = false; btn.innerText = "Order Placed!";
+                    e.target.reset(); document.getElementById('payment-method').value = 'card'; this.togglePaymentMethod();
+                    this.nav('store'); this.renderStore(); this.showToast("Order Placed Successfully!");
+                }, 2000);
+            },
+
+            /* --- ADMIN --- */
+            renderAdminPage() {
+                // Render Inventory
+                document.getElementById('admin-tbody').innerHTML = this.data.products.map(p => `
+                    <tr>
+                        <td><img src="${p.img}" class="table-img"></td>
+                        <td><div style="font-weight:500">${p.name}</div><small style="color:var(--text-muted)">${p.category}</small></td>
+                        <td>${p.stock}</td>
+                        <td>₹${p.price}</td>
+                        <td><button class="btn btn-danger btn-icon" onclick="app.deleteProduct(${p.id})">🗑</button></td>
+                    </tr>
+                `).join('');
+
+                // Render Orders
+                const orderBody = document.getElementById('admin-orders-tbody');
+                if(this.data.orders.length === 0) {
+                    orderBody.innerHTML = '<tr><td colspan="6" style="text-align:center;color:var(--text-muted)">No orders yet.</td></tr>';
+                } else {
+                    // Sort latest first
+                    const sortedOrders = [...this.data.orders].reverse();
+                    orderBody.innerHTML = sortedOrders.map(order => {
+                        let badgeClass = 'badge-pending';
+                        if(order.status === 'Paid') badgeClass = 'badge-paid';
+                        if(order.status === 'Shipped') badgeClass = 'badge-shipped';
+                        if(order.status === 'Delivered') badgeClass = 'badge-delivered';
+
+                        return `
+                        <tr>
+                            <td><span style="font-weight:600; font-family:monospace">${order.id}</span></td>
+                            <td style="font-size:0.9rem">${order.date}</td>
+                            <td>${order.customer}</td>
+                            <td style="font-weight:600">₹${order.total.toFixed(2)}</td>
+                            <td><span class="badge ${badgeClass}">${order.status}</span></td>
+                            <td>
+                                <select class="status-select" onchange="app.updateOrderStatus('${order.id}', this.value)">
+                                    <option value="Pending" ${order.status === 'Pending' ? 'selected' : ''}>Pending</option>
+                                    <option value="Paid" ${order.status === 'Paid' ? 'selected' : ''}>Paid</option>
+                                    <option value="Shipped" ${order.status === 'Shipped' ? 'selected' : ''}>Shipped</option>
